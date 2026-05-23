@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Midterm Tasks</title>
+<title>Finals Tasks</title>
 <link href="https://fonts.googleapis.com/css2?family=Birthstone&family=Cormorant:ital,wght@0,300..700;1,300..700&family=Padauk:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
   :root {
@@ -125,7 +125,6 @@
     text-align: center;
     animation: fadeDown 0.7s ease both;
     max-width: 80%;
-    /* very subtle glass — just enough to lift it off the bg */
     background: rgba(255, 255, 255, 0.25);
     border: 1px solid rgba(197, 114, 132, 0.10);
     border-radius: 32px;
@@ -150,7 +149,6 @@
     font-style: italic; color: var(--accent); font-size: 1.25em;
     letter-spacing: 0;
   }
-  /* petal-row reuses the exact same structure as .sec-divider */
   .intro-header .petal-row {
     display: flex; align-items: center; justify-content: center;
     gap: 0; margin: 24px auto 0;
@@ -189,14 +187,12 @@
     padding: 0 40px; max-width: 900px;
     overflow: visible;
   }
-  /* left / right extending lines */
   .sec-divider .sd-line {
     flex: 1; height: 1px;
     background: linear-gradient(to var(--dir), var(--accent-light), transparent);
   }
   .sec-divider .sd-line-left  { --dir: left; }
   .sec-divider .sd-line-right { --dir: right; }
-  /* centre ornament */
   .sec-divider .sd-ornament {
     display: flex; align-items: center; gap: 8px;
     padding: 0 18px;
@@ -217,7 +213,7 @@
     background: var(--accent); opacity: 0.5;
   }
 
-  /* ── Section header (mirrors main header style) ── */
+  /* ── Section header ── */
   .section-header {
     position: relative; z-index: 10;
     padding: 80px 40px 20px;
@@ -251,8 +247,6 @@
   }
   .grid-3 { grid-template-columns: repeat(3, 1fr); }
   .grid-2 { grid-template-columns: repeat(2, 1fr); max-width: 900px; }
-
-  /* bottom spacing after last grid */
   .grid:last-of-type { margin-bottom: 80px; }
 
   /* ── Card ── */
@@ -294,6 +288,28 @@
     position: absolute; inset: 0;
     background: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='160' cy='40' r='80' fill='%23FFFFFF' opacity='0.12'/%3E%3Ccircle cx='20' cy='160' r='60' fill='%23FFFFFF' opacity='0.10'/%3E%3C/svg%3E") no-repeat center/cover;
     pointer-events: none;
+  }
+
+  /* ── Slideshow indicator badge ── */
+  .card-banner .slideshow-hint {
+    position: absolute;
+    bottom: 12px; left: 14px;
+    background: rgba(197,114,132,0.85);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    font-family: 'Cormorant', serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    padding: 4px 10px 4px 8px;
+    border-radius: 20px;
+    display: flex; align-items: center; gap: 5px;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .slideshow-hint svg {
+    width: 12px; height: 12px;
+    stroke: #fff; fill: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
   }
 
   .card-tag {
@@ -339,27 +355,101 @@
   /* ── Lightbox ── */
   .lightbox-overlay {
     display: none; position: fixed; inset: 0;
-    background: rgba(20, 10, 10, 0.85);
+    background: rgba(20, 10, 10, 0.88);
     z-index: 999; align-items: center; justify-content: center;
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(8px);
     animation: fadeIn 0.25s ease;
   }
   .lightbox-overlay.active { display: flex; }
-  .lightbox-overlay img {
-    max-width: 90vw; max-height: 88vh;
-    border-radius: 16px;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
-    animation: zoomIn 0.3s cubic-bezier(.22,.97,.46,1);
-    object-fit: contain;
-  }
+
   .lightbox-close {
     position: absolute; top: 20px; right: 28px;
     color: #fff; font-size: 2rem; cursor: pointer;
     font-family: 'Cormorant', serif; line-height: 1;
     opacity: 0.8; transition: opacity 0.2s, transform 0.2s;
     background: none; border: none;
+    z-index: 10;
   }
   .lightbox-close:hover { opacity: 1; transform: scale(1.15); }
+
+  /* Slideshow container */
+  .lightbox-slideshow {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    width: 90vw; max-width: 1100px;
+    gap: 0;
+  }
+
+  .lightbox-slideshow img {
+    max-width: calc(90vw - 120px);
+    max-height: 88vh;
+    border-radius: 16px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    animation: zoomIn 0.3s cubic-bezier(.22,.97,.46,1);
+    object-fit: contain;
+    display: block;
+  }
+
+  /* Prev / Next arrows */
+  .lb-arrow {
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    width: 48px; height: 48px;
+    background: rgba(255,255,255,0.12);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    transition: background 0.2s, transform 0.2s;
+    z-index: 10;
+    flex-shrink: 0;
+  }
+  .lb-arrow:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-50%) scale(1.1);
+  }
+  .lb-arrow svg {
+    width: 20px; height: 20px;
+    stroke: currentColor; fill: none;
+    stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .lb-arrow.prev { left: 0; }
+  .lb-arrow.next { right: 0; }
+
+  /* Hide arrows when single image */
+  .lightbox-slideshow.single .lb-arrow { display: none; }
+
+  /* Dots */
+  .lb-dots {
+    position: absolute;
+    bottom: -36px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 8px;
+  }
+  .lb-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    border: none;
+  }
+  .lb-dot.active {
+    background: var(--accent);
+    transform: scale(1.25);
+  }
+  .lightbox-slideshow.single .lb-dots { display: none; }
+
+  /* Counter */
+  .lb-counter {
+    position: absolute;
+    bottom: -62px; left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,0.5);
+    font-family: 'Cormorant', serif;
+    font-size: 13px; letter-spacing: 2px;
+    white-space: nowrap;
+  }
+  .lightbox-slideshow.single .lb-counter { display: none; }
 
   /* ── Animations ── */
   @keyframes fadeDown {
@@ -377,6 +467,16 @@
     from { opacity: 0; transform: scale(0.88); }
     to   { opacity: 1; transform: scale(1); }
   }
+  @keyframes slideLeft {
+    from { opacity: 0; transform: translateX(40px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideRight {
+    from { opacity: 0; transform: translateX(-40px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .lb-anim-left  { animation: slideLeft  0.28s cubic-bezier(.22,.97,.46,1); }
+  .lb-anim-right { animation: slideRight 0.28s cubic-bezier(.22,.97,.46,1); }
 
   /* ── Responsive ── */
   @media (max-width: 900px) {
@@ -396,9 +496,19 @@
 <body>
 
 <!-- Lightbox -->
-<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+<div class="lightbox-overlay" id="lightbox" onclick="handleOverlayClick(event)">
   <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <img id="lightbox-img" src="" alt="Full preview">
+  <div class="lightbox-slideshow" id="slideshow-wrap">
+    <button class="lb-arrow prev" id="lb-prev" onclick="slideshowNav(event,-1)">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <img id="lightbox-img" src="" alt="Full preview">
+    <button class="lb-arrow next" id="lb-next" onclick="slideshowNav(event,1)">
+      <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <div class="lb-dots" id="lb-dots"></div>
+    <div class="lb-counter" id="lb-counter"></div>
+  </div>
 </div>
 
 <a class="back-btn" href="index.html">
@@ -432,42 +542,85 @@
 
 <div class="grid grid-3">
 
-  <a class="card" href="Bike Sales_Prepare_Lab 3.4.7_fixed.xlsx">
-    <div class="card-banner" onclick="openLightbox(event, 'images/m1.png')">
+  <!-- Task 1 — 5 images (ss1–ss5) -->
+  <a class="card" href="f-ft/final_task_1_call center.sql"
+     data-slides='["f-ft/img-ft1/ss1.png","f-ft/img-ft1/ss2.png","f-ft/img-ft1/ss3.png","f-ft/img-ft1/ss4.png","f-ft/img-ft1/ss5.png"]'>
+    <div class="card-banner" onclick="openSlideshow(event, this)">
       <span class="card-tag">Task 01</span>
-      <img class="card-img" src="images/m1.png" alt="Task 1 preview">
+      <img class="card-img" src="f-ft/img-ft1/ss1.png" alt="Task 1 preview">
+      <span class="slideshow-hint">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>
+        5 photos
+      </span>
     </div>
     <div class="card-body">
-      <h2>Finals Lab Task 1: Data Cleaning and Preparation</h2>
-      <p>Cleaned and prepared a bike sales dataset by fixing inconsistencies, removing duplicates, and standardizing values. This task focused on ensuring data accuracy and reliability before any analysis is performed.</p>
+      <h2>Finals Task 1: Data Preparations and Analysis using SQL</h2>
+      <p>Cleaned, transformed, and analyzed call center data using SQL by standardizing date formats, handling missing values, exploring key metrics, and performing aggregations to identify trends in customer sentiment, response times, call durations, and service performance.</p>
       <span class="card-btn">Download to view Task →</span>
     </div>
   </a>
 
-  <a class="card" href="Bike_Sales_Pivot_Lab.xlsx">
-    <div class="card-banner" onclick="openLightbox(event, 'images/m2.png')">
+  <!-- Task 2 — single image -->
+  <a class="card" href="f-ft/ft2.zip">
+    <div class="card-banner" onclick="openLightbox(event, 'f-ft/img/ft2.png')">
       <span class="card-tag">Task 02</span>
-      <img class="card-img" src="images/m2.png" alt="Task 2 preview">
+      <img class="card-img" src="f-ft/img/ft2.png" alt="Task 2 preview">
     </div>
     <div class="card-body">
-      <h2>Finals Task 2: Pivot Tables and Charts in Excel</h2>
-      <p>Analyzed bike sales data using pivot tables and charts to summarize trends and insights. This task explored how to turn raw data into meaningful visual summaries for better decision-making.</p>
+      <h2>Finals Task 2: Working and Navigating through Power BI</h2>
+      <p>Cleaned and prepared airport flight data in Power BI, designed a star schema data model, created DAX measures and calculated columns, and developed an interactive dashboard to visualize total, delayed, and cancelled flights for performance analysis.</p>
       <span class="card-btn">Download to view Task →</span>
     </div>
   </a>
 
-  <a class="card" href="FinalsTask3_MijaresHennessy.xlsx">
-    <div class="card-banner" onclick="openLightbox(event, 'images/m3.png')">
+  <!-- Task 3 — single image -->
+  <a class="card" href="f-ft/ft3.pbix">
+    <div class="card-banner" onclick="openLightbox(event, 'f-ft/img/ft3.png')">
       <span class="card-tag">Task 03</span>
-      <img class="card-img" src="images/m3.png" alt="Task 3 preview">
+      <img class="card-img" src="f-ft/img/ft3.png" alt="Task 3 preview">
     </div>
     <div class="card-body">
-      <h2>Midterm Task 3: Normalization using Power Query</h2>
-      <p>Normalized raw data into structured tables using Power Query in Excel. This task demonstrated how to reduce redundancy and organize data into a clean, relational format.</p>
+      <h2>Finals Lab Task 3: Using Dax Time Intelligence Function</h2>
+      <p>Created and applied DAX time intelligence measures in Power BI to analyze date-based trends and manipulate filter contexts for time-related data analysis.</p>
       <span class="card-btn">Download to view Task →</span>
     </div>
   </a>
 
+  <!-- Task 4 — 3 images (ft4-1, ft4-2, ft4-3) -->
+  <a class="card" href="f-ft/ft4.zip"
+     data-slides='["f-ft/img-ft4/ft4-1.png","f-ft/img-ft4/ft4-2.png","f-ft/img-ft4/ft4-3.png"]'>
+    <div class="card-banner" onclick="openSlideshow(event, this)">
+      <span class="card-tag">Task 04</span>
+      <img class="card-img" src="f-ft/img-ft4/ft4-1.png" alt="Task 4 preview">
+      <span class="slideshow-hint">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>
+        3 photos
+      </span>
+    </div>
+    <div class="card-body">
+      <h2>Finals Task 4: Design Power BI reports</h2>
+      <p>Designed and developed a three-page Power BI report by configuring visuals, formatting report elements, syncing slicers, publishing to the Power BI service, and interacting with report dashboards.</p>
+      <span class="card-btn">Download to view Task →</span>
+    </div>
+  </a>
+
+  <!-- Task 5 — 2 images (ft5-1, ft5-2) -->
+  <a class="card" href="f-ft/ft5.pbix"
+     data-slides='["f-ft/img-ft5/ft5-1.png","f-ft/img-ft5/ft5-2.png"]'>
+    <div class="card-banner" onclick="openSlideshow(event, this)">
+      <span class="card-tag">Task 05</span>
+      <img class="card-img" src="f-ft/img-ft5/ft5-1.png" alt="Task 5 preview">
+      <span class="slideshow-hint">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg>
+        2 photos
+      </span>
+    </div>
+    <div class="card-body">
+      <h2>Finals Task 5: Perform analytics in Power BI</h2>
+      <p>Performed data analytics in Power BI by creating a Sales Exploration report using animated scatter charts and forecasting visuals to analyze trends and predict future values.</p>
+      <span class="card-btn">Download to view Task →</span>
+    </div>
+  </a>
 </div>
 
 <!-- ── Section divider ── -->
@@ -486,78 +639,151 @@
 <!-- ── Practice Tasks Section ── -->
 <div class="section-header">
   <p class="header-eyebrow">✦ Section two</p>
-  <h1>The <em>Practice</em> Tasks</h1>
+  <h1>The <em>Other</em> Tasks</h1>
   <div class="divider"><span></span><i></i><span></span></div>
 </div>
 
 <div class="grid grid-2">
 
-  <a class="card" href="GALLARDO_MIJARES.pdf">
-    <div class="card-banner" onclick="openLightbox(event, 'images/p1.png')">
-      <span class="card-tag">Task 01</span>
-      <img class="card-img" src="images/p1.png" alt="Task 1 preview">
+  <a class="card" href="f-ft/ft-prac1.zip">
+    <div class="card-banner" onclick="openLightbox(event, 'f-ft/img/ft-prac1.png')">
+      <span class="card-tag">Task 06</span>
+      <img class="card-img" src="f-ft/img/ft-prac1.png" alt="Task 1 preview">
     </div>
     <div class="card-body">
-      <h2>Paired Task 1: Asking the Right Questions</h2>
-      <p>Practiced formulating the right analytical questions to guide a data investigation. This task emphasized the importance of defining clear objectives before diving into data analysis.</p>
+      <h2>Practice Task 1</h2>
+      <p>Cleaned and validated shipment data by standardizing text formats, correcting dates, verifying delivery and weight records, and removing duplicate entries to improve data accuracy and consistency.</p>
       <span class="card-btn">Download to view Task →</span>
     </div>
   </a>
 
-  <a class="card" href="Data Cleaning Start_Mijares.xlsx">
-    <div class="card-banner" onclick="openLightbox(event, 'images/p2.png')">
-      <span class="card-tag">Task 02</span>
-      <img class="card-img" src="images/p2.png" alt="Task 2 preview">
+  <a class="card" href="f-ft/finalproj.zip">
+    <div class="card-banner" onclick="openLightbox(event, 'f-ft/img/finalproj.png')">
+      <span class="card-tag">Task 07</span>
+      <img class="card-img" src="f-ft/img/finalproj.png" alt="Final Project preview">
     </div>
     <div class="card-body">
-      <h2>Practice Task 1: Data Preparation and Cleaning</h2>
-      <p>Cleaned and prepared a raw dataset by handling missing values, errors, and formatting issues. This task built foundational skills in making messy data analysis-ready.</p>
+      <h2>Final Project: Instagram Usage Analysis</h2>
+      <p>Applied data analytics techniques to a synthetic Instagram usage dataset by preprocessing and modeling over 134,000 user records, performing exploratory data analysis, and developing interactive dashboards to identify behavioral trends and generate actionable insights on how demographics, lifestyles, and habits influence Instagram usage.</p>
       <span class="card-btn">Download to view Task →</span>
     </div>
   </a>
-
-  <a class="card" href="Practice_Task2_Mijares_Hennessy.xlsx">
-    <div class="card-banner" onclick="openLightbox(event, 'images/p3.png')">
-      <span class="card-tag">Task 03</span>
-      <img class="card-img" src="images/p3.png" alt="Task 3 preview">
-    </div>
-    <div class="card-body">
-      <h2>Practice Task 2: MS Excel Functions</h2>
-      <p>Applied essential Excel functions to manipulate and analyze data efficiently. This task covered commonly used formulas that streamline data processing and calculations.</p>
-      <span class="card-btn">Download to view Task →</span>
-    </div>
-  </a>
-
-  <a class="card" href="Data Visualization in Excel Demo_Mijares.xlsx">
-    <div class="card-banner" onclick="openLightbox(event, 'images/p4.png')">
-      <span class="card-tag">Task 04</span>
-      <img class="card-img" src="images/p4.png" alt="Task 4 preview">
-    </div>
-    <div class="card-body">
-      <h2>Practice Task 3: Creating Dashboards in Excel</h2>
-      <p>Built an interactive dashboard in Excel to visualize key metrics and trends. This task focused on designing clear, user-friendly layouts that make data easy to explore at a glance.</p>
-      <span class="card-btn">Download to view Task →</span>
-    </div>
-  </a>
-
 </div>
 
 <script>
+  /* ── State ── */
+  let currentSlides = [];
+  let currentIndex  = 0;
+
+  /* ── Open single-image lightbox (tasks 2, 3, 6, 7) ── */
   function openLightbox(e, src) {
     e.preventDefault();
     e.stopPropagation();
-    document.getElementById('lightbox-img').src = src;
+    openSlideshowWith([src], 0);
+  }
+
+  /* ── Open slideshow from card banner click (tasks 1, 4, 5) ── */
+  function openSlideshow(e, banner) {
+    e.preventDefault();
+    e.stopPropagation();
+    const card   = banner.closest('[data-slides]');
+    const slides = JSON.parse(card.dataset.slides);
+    openSlideshowWith(slides, 0);
+  }
+
+  /* ── Core open logic ── */
+  function openSlideshowWith(slides, startIndex) {
+    currentSlides = slides;
+    currentIndex  = startIndex;
+
+    const wrap = document.getElementById('slideshow-wrap');
+    wrap.classList.toggle('single', slides.length === 1);
+
+    buildDots();
+    renderSlide(null);
+
     document.getElementById('lightbox').classList.add('active');
     document.body.style.overflow = 'hidden';
   }
+
+  /* ── Build dot indicators ── */
+  function buildDots() {
+    const container = document.getElementById('lb-dots');
+    container.innerHTML = '';
+    currentSlides.forEach((_, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'lb-dot' + (i === currentIndex ? ' active' : '');
+      btn.setAttribute('aria-label', 'Go to image ' + (i + 1));
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const dir = i > currentIndex ? 'left' : 'right';
+        currentIndex = i;
+        renderSlide(dir);
+      });
+      container.appendChild(btn);
+    });
+  }
+
+  /* ── Render the current slide ── */
+  function renderSlide(animDir) {
+    const img     = document.getElementById('lightbox-img');
+    const counter = document.getElementById('lb-counter');
+
+    // Remove old animation classes
+    img.classList.remove('lb-anim-left', 'lb-anim-right');
+
+    // Force reflow so animation re-fires
+    void img.offsetWidth;
+
+    img.src = currentSlides[currentIndex];
+    img.alt = 'Image ' + (currentIndex + 1) + ' of ' + currentSlides.length;
+
+    if (animDir === 'left')  img.classList.add('lb-anim-left');
+    if (animDir === 'right') img.classList.add('lb-anim-right');
+
+    // Update dots
+    document.querySelectorAll('.lb-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === currentIndex);
+    });
+
+    // Update counter
+    counter.textContent = (currentIndex + 1) + ' / ' + currentSlides.length;
+  }
+
+  /* ── Arrow navigation ── */
+  function slideshowNav(e, dir) {
+    e.stopPropagation();
+    const newIndex = (currentIndex + dir + currentSlides.length) % currentSlides.length;
+    const animDir  = dir > 0 ? 'left' : 'right';
+    currentIndex   = newIndex;
+    renderSlide(animDir);
+  }
+
+  /* ── Close ── */
   function closeLightbox() {
     document.getElementById('lightbox').classList.remove('active');
     document.getElementById('lightbox-img').src = '';
     document.body.style.overflow = '';
+    currentSlides = [];
+    currentIndex  = 0;
   }
+
+  /* ── Click on overlay backdrop (but not image or arrows) ── */
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('lightbox')) {
+      closeLightbox();
+    }
+  }
+
+  /* ── Keyboard navigation ── */
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeLightbox();
+    if (!document.getElementById('lightbox').classList.contains('active')) return;
+    if (e.key === 'Escape')      closeLightbox();
+    if (e.key === 'ArrowRight')  slideshowNav({ stopPropagation: () => {} },  1);
+    if (e.key === 'ArrowLeft')   slideshowNav({ stopPropagation: () => {} }, -1);
   });
+
+  /* ── Prevent image click from closing overlay ── */
   document.getElementById('lightbox-img').addEventListener('click', e => e.stopPropagation());
 </script>
 
